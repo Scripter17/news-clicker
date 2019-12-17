@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src="main.js"></script>
+	<link rel="stylesheet" href="main.css">
+	<title>News Clicker</title>
+</head>
+<body>
+	<h1>News Clicker</h1>
+	<h3>James C. Wise | Last update: 2019-12-17 (beta 0.1)</h3>
+	<table id="table-curr">
+		<tr>
+			<td>
+				Articles: <span id="curr-articles-now">?</span><br/>
+				<button id="curr-article-make" onclick="Game.makeArticle();">Make article</button>
+				<progress min="0" max="1" value="0" id="prog-article">0%</progress>
+			</td>
+			<td>
+				Articles per second: <span id="curr-articlesPerSecond-now">?</span>
+			</td>
+			<td>Ads Per Article: <span id="curr-adsPerArticle-now">?</span></td>
+		</tr>
+		<tr>
+			<td>Money: $<span id="curr-money-now">?</span></td>
+			<td>Trust: <span id="curr-trust-now">?</span></td>
+			<td>Clicks Per Second: <span id="curr-clicksPerSecond-now">?</span></td>
+		</tr>
+		<tr>
+			<td>
+				<table id="table-hiring"></table>
+			</td>
+			<td>
+				<table id="table-upgrades"></table>
+			</td>
+		</tr>
+	</table>
+</body>
