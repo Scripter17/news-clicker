@@ -8,30 +8,30 @@
 </head>
 <body>
 	<h1>News Clicker</h1>
-	<h3>James C. Wise | Last update: 2019-12-17 (beta 0.1)</h3>
+	<h3>James C. Wise | Last update: 2020-01-07 (beta 0.2)</h3>
 	<table id="table-curr">
 		<tr>
 			<td>
-				Articles: <span id="curr-articles-now">?</span><br/>
+				Articles: <span id="curr-articles">?</span><br/>
 				<button id="curr-article-make" onclick="Game.makeArticle();">Make article</button>
 				<progress min="0" max="1" value="0" id="prog-article">0%</progress>
 			</td>
 			<td>
-				Articles per second: <span id="curr-articlesPerSecond-now">?</span>
+				Articles per second: <span id="curr-articlesPerSecond">?</span>
 			</td>
-			<td>Ads Per Article: <span id="curr-adsPerArticle-now">?</span></td>
+			<td>Ads Per Article: <span id="curr-adsPerArticle">?</span></td>
 		</tr>
 		<tr>
-			<td>Money: $<span id="curr-money-now">?</span></td>
-			<td>Trust: <span id="curr-trust-now">?</span></td>
-			<td>Clicks Per Second: <span id="curr-clicksPerSecond-now">?</span></td>
+			<td>Money: $<span id="curr-money">?</span></td>
+			<td>Trust: <span id="curr-trust">?</span></td>
+			<td>Clicks Per Second: <span id="curr-clicksPerSecond">?</span></td>
 		</tr>
 		<tr>
 			<td>
-				<table id="table-hiring"></table>
+				<table><tbody id="table-people"></tbody></table>
 			</td>
 			<td>
-				<table id="table-upgrades"></table>
+				<table><tbody id="table-upgrades"></tbody></table>
 			</td>
 		</tr>
 	</table>
