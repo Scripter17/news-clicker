@@ -4,17 +4,18 @@ Game={
 		console.log("Opened", new Date());
 		Game.nums={
 			"currency":{
-				"articles":10,
+				"articles":0,
 				"articlesPerSecond":0,
 				"adsPerArticle":0,
 				"moneyPerAd":0.01,
-				"money":1,
+				"money":0,
 				"moneyPerSecond":0,
 				"trust":0.5,
 				"clicksPerSecond":0
 			},
 			"articleTime":5000,
-			"articleLast":0
+			"articleLast":0,
+			"clickCoefficent":0.2
 		};
 		Game.elems={
 			"articleBar":document.getElementById("prog-article"),
@@ -35,12 +36,14 @@ Game={
 		};
 		Game.hiring={
 			"writer":{"price":0.13, "quantity":0, "func":"Game.nums.currency.articlesPerSecond+=0.2;", "mods":{"articlesPerSecond":0.2}},
-			"researcher":{"price":1, "quantity":0, "func":"Game.nums.currency.articlesPerSecond+=0.5; Game.currency.trust+=0.1", "mods":{"articlesPerSecond":0.5, "trust":0.01}},
-			"paparazzi":{"price":5, "quantity":0, "func":"Game.nums.currency.articlesPerSecond+=1; Game.currency.trust-=0.2", "func":"Game.currency.articlesPerSecond+=0.2;", "mods":{"articlesPerSecond":2, "trust":-0.02}}
+			"researcher":{"price":1, "quantity":0, "func":"Game.nums.currency.articlesPerSecond+=0.5; Game.nums.currency.trust+=0.01", "mods":{"articlesPerSecond":0.5, "trust":0.01}},
+			"paparazzi":{"price":5, "quantity":0, "func":"Game.nums.currency.articlesPerSecond+=1; Game.nums.currency.trust-=0.02", "mods":{"articlesPerSecond":2, "trust":-0.02}}
 		};
 		Game.upgrades={
-			"Faster typing":{"price":25, "bought":false, "func":"Game.nums.articleTime/=2;"},
-			"Even faster typing":{"price":15625, "bought":false, "func":"Game.nums.articleTime/=2;"}
+			"Faster typing":{"price":125, "bought":false, "func":"Game.nums.articleTime/=2;"},
+			"Even faster typing":{"price":3125, "bought":false, "func":"Game.nums.articleTime/=2;"},
+			"Unpaid overtime":{"price":78125, "bought":false, "func":"for (var i in Game.hiring){Game.hiring[i].price/=2;}; Game.nums.currency.trust/=2"},
+			"Celebrety endorsement":{"price":72697676, "bought":false, "func":"Game.nums.clickCoefficent*=2; Game.nums.currency.trust+=0.1;"}
 		}
 		Game.renderLoop()
 	},
@@ -88,7 +91,7 @@ Game={
 			}
 		}
 		Game.nums.currency.articles+=Game.nums.currency.articlesPerSecond*dt;
-		Game.nums.currency.clicksPerSecond=Game.nums.currency.trust*Game.nums.currency.articles/5;
+		Game.nums.currency.clicksPerSecond=Game.nums.currency.trust*Game.nums.currency.articles*Game.nums.clickCoefficent;
 		Game.nums.currency.money+=Game.nums.currency.moneyPerSecond*dt
 		if (Game.nums.currency.articles>=Game.recalcFlags.nextAPAInc){
 			Game.nums.currency.adsPerArticle++;
@@ -109,7 +112,7 @@ Game={
 		}
 		for (var i in Game.upgrades){
 			if (Game.nums.currency.money>=Game.upgrades[i].price/1.2 && Game.upgrades[i].shown!=true){
-				Game.elems.upgradesTable.insertRow(0).innerHTML="<td>"+i+"</td><td><button onclick='Game.buyUpgrade(\""+i+"\")'>Buy ($"+Game.upgrades[i].price+")</td>"
+				Game.elems.upgradesTable.insertRow(-1).innerHTML="<td>"+i+"</td><td><button onclick='Game.buyUpgrade(\""+i+"\")'>Buy ($"+Game.upgrades[i].price+")</td>"
 				Game.elems.upgradesTable.querySelector("tr:last-child").setAttribute("id", "buy-cont-"+i.split(" ").join("-"))
 				Game.upgrades[i].shown=true
 			}
