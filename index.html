@@ -5,33 +5,41 @@
 	<script src="main.js"></script>
 	<link rel="stylesheet" href="main.css">
 	<title>News Clicker</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<h1>News Clicker</h1>
-	<h3>James C. Wise | Last update: 2020-01-07 (beta 0.2)</h3>
-	<table id="table-curr">
-		<tr>
-			<td>
-				Articles: <span id="curr-articles">?</span><br/>
-				<button id="curr-article-make" onclick="Game.makeArticle();">Make article</button>
-				<progress min="0" max="1" value="0" id="prog-article">0%</progress>
+	<h3>James C. Wise | Last update: 2020-01-17 (beta 0.5)</h3>
+	<table id="table-main">
+		<tr style="display:none;"><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td></tr>
+		<tr class="tr-curr">
+			<td colspan="2">
+				Articles: <span id="articles">?</span><br/>
+				Per Second: <span id="articlesPerSecond">?</span>
 			</td>
-			<td>
-				Articles per second: <span id="curr-articlesPerSecond">?</span>
+			<td colspan="2">
+				<button id="makeArticle" onclick="Game.makeArticle();">Make article</button>
+				<progress min="0" max="1" value="0" id="articleProgress">0%</progress>
 			</td>
-			<td>Ads Per Article: <span id="curr-adsPerArticle">?</span></td>
+			<td colspan="2">
+				Ads Per Article: <span id="adsPerArticle">?</span><br/>
+				Money per ad: <span id="moneyPerAd">?</span>
+			</td>
 		</tr>
-		<tr>
-			<td>Money: $<span id="curr-money">?</span></td>
-			<td>Trust: <span id="curr-trust">?</span></td>
-			<td>Clicks Per Second: <span id="curr-clicksPerSecond">?</span></td>
-		</tr>
-		<tr>
-			<td>
-				<table><tbody id="table-people"></tbody></table>
+		<tr class="tr-curr">
+			<td colspan="2">
+				Money: <span id="money">?</span><br/>
+				Per second:<span id="moneyPerSecond">?</span>
 			</td>
-			<td>
-				<table><tbody id="table-upgrades"></tbody></table>
+			<td colspan="2">Trust: <span id="trust">?</span></td>
+			<td colspan="2">Clicks Per Second: <span id="clicksPerSecond">?</span></td>
+		</tr>
+		<tr id="buyTables">
+			<td colspan="3">
+				<table><tbody id="hiringTable"></tbody></table>
+			</td>
+			<td colspan="3">
+				<table><tbody id="upgradeTable"></tbody></table>
 			</td>
 		</tr>
 	</table>
