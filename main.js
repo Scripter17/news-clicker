@@ -3,7 +3,7 @@ Game={
 		console.log("News clicker", "Opened", new Date());
 		Game.data={
 			"curr":{
-				"articles":         {value:1e9},
+				"articles":         {value:0},
 				"articlesPerSecond":{value:0},
 				"adsPerArticle":    {value:0, isInt:true},
 				"moneyPerAd":       {value:0, isMoney:true},
