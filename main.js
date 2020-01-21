@@ -3,7 +3,7 @@ Game={
 		console.log("News clicker", "Opened", new Date());
 		Game.data={
 			"curr":{
-				"articles":         {value:0},
+				"articles":         {value:1e9},
 				"articlesPerSecond":{value:0},
 				"adsPerArticle":    {value:0, isInt:true},
 				"moneyPerAd":       {value:0, isMoney:true},
@@ -31,15 +31,16 @@ Game={
 				{"name":"photographer", "basePrice":15,   "baseAPS":4,   "baseTrust": 0.05,  "baseMPS":-0.08}
 			],
 			"upgrades":[
-				{"name":"Faster typing",         "price":1e2},
-				{"name":"Even faster typing",    "price":1e3},
-				{"name":"Unpaid overtime",       "price":1e4},
-				{"name":"Celebrety endorsement", "price":1e5},
-				{"name":"Super trust",           "price":1e6},
-				{"name":"Sponsorship 1",         "price":1e7},
-				{"name":"Sponsorship 2",         "price":1e8},
-				{"name":"Political ads",         "price":1e9},
-				{"name":"Bandwagoning",          "price":1e10}
+				{"name":"Faster typing",         "price":3**0},
+				{"name":"Unpaid overtime",       "price":3**1},
+				{"name":"Even faster typing",    "price":3**2},
+				{"name":"Celebrety endorsement", "price":3**3},
+				{"name":"Super trust",           "price":3**4},
+				{"name":"Sponsorship 1",         "price":3**5},
+				{"name":"Sponsorship 2",         "price":3**6},
+				{"name":"Political ads",         "price":3**7},
+				{"name":"Bandwagoning",          "price":3**8},
+				{"name":"Pay-to-view archives",  "price":3**9}
 			],
 		};
 		for (var i in Game.data.curr){Game.data.curr[i].element=document.getElementById(i);}
@@ -55,8 +56,8 @@ Game={
 			x.shown=false;
 			x.index=Game.data.upgradesIDFromName[x.name]=i;
 		});
-		
 		Game.renderLoop();
+		Game.doHeadlines()
 	},
 	format:function(num, isMoney, isInt, doSci){
 		if (isMoney==undefined){isMoney=false;}
@@ -137,11 +138,8 @@ Game={
 		if (Game.getUpgrade("Celebrety endorsement").bought){trust+=0.1;}
 		if (Game.getUpgrade("Super trust").bought){maxTrust*=2;}
 		if (Game.getUpgrade("Bandwagoning").bought){maxTrust*=1.5; trust/=1.1;}
-		trust=Math.min(maxTrust,Math.max(0.01, trust));
+		if (Game.getUpgrade("Pay-to-view archives").bought){mps+=Math.sqrt(Game.data.curr.articles.value/100);}
 		// ==/TRUST STUFF==
-		apa=Math.max(0, Math.floor(Math.log10(Game.data.curr.articles.value)));
-		cps=trust*Game.data.curr.articles.value*Game.data.nums.clickCoefficent;
-		mps=mps+cps*apa*mpa; // Math.max(0, mps+cps*apa*mpa);
 		// ==ARTICLE TIME==
 		if (Game.getUpgrade("Faster typing").bought){artTime/=2;}
 		if (Game.getUpgrade("Even faster typing").bought){artTime/=2;}
@@ -149,6 +147,11 @@ Game={
 		if (Game.getUpgrade("Sponsorship 1").bought){mpa*=2; trust/=1.1;}
 		if (Game.getUpgrade("Sponsorship 2").bought){mpa*=2; trust/=1.1;}
 		if (Game.getUpgrade("Political ads").bought){mpa*=1.5; trust/=1.5;}
+
+		trust=Math.min(maxTrust,Math.max(0.01, trust));
+		apa=Math.max(0, Math.floor(Math.log10(Game.data.curr.articles.value)));
+		cps=trust*Game.data.curr.articles.value*Game.data.nums.clickCoefficent;
+		mps+=cps*apa*mpa; // Math.max(0, mps+cps*apa*mpa);
 		// Set global data
 		Game.data.curr.articlesPerSecond.value=aps;
 		Game.data.curr.trust.value=trust;
@@ -195,6 +198,45 @@ Game={
 			x=Game.data.curr[i];
 			x.element.innerHTML=Game.format(x.value, x.isMoney, x.isInt, x.doSci);
 		}
+	},
+	doHeadlines:function(){
+		var places=["bank", "bakery", "The White House", "Egypt"],
+			things=["7 strange arrows", "a meteor", "the concept of time", "pastries"],
+			action=["steals", "kills", "destroys"],
+			people=["Florida man", "A celebrety", "The president"],
+			get=x=>{return x[Math.floor(Math.random()*(x.length))];},
+			headlines=[
+				{"text":"You start a blog", "condition":function(a,m,t,apa){return a<10&&m<20&&apa<1;}},
+				{"text":"You figure out how to use Google Ads", "condition":function(a,m,t,apa){return a<100&&apa>0;}},
+				{"text":"People hate you", "condition":function(a,m,t,apa){return t<0.1;}},
+				{"text":"People love you", "condition":function(a,m,t,apa){return t>0.9;}},
+				{"text":"People really love you", "condition":function(a,m,t,apa){return t>1.8}},
+				{"text":"<span style='color:green;'>// TODO: More headlines</span>", "condition":function(a,m,t,apa){return true;}},
+				{"text":"nice", "condition":function(a,m,t,apa){return Math.abs(m-69)<0.01;}},
+				{"text":"People are complaining about your ads", "condition":function(a,m,t,apa){return apa>10;}},
+				{"text":"You find a $20 bill on the ground", "condition":function(a,m,t,apa){return Math.random()<0.05;}},
+				{"text":"Someone stole your wallet", "condition":function(a,m,t,apa){return Math.random()<0.005;}},
+				{"text":"{things}", "condition":function(a,m,t,apa){return Math.random()<0.01;}},
+				{"text":"People are mad at you for being rich", "condition":function(a,m,t,apa){return m>1e7;}},
+				{"text":"People are dying in the worst wildfire season ever. You say it's not your problem and blame enviromentalists", "condition":function(a,m,t,apa){return t<0.25&&m>1e9;}},
+				{"text":"The FBI found your employee treatment unethical; You pay them to ignore it", "condition":function(a,m,t,apa){return m>1e12&&t<0.1;}},
+				{"text":"\"Tax evasion\" says sekeleton regarding how he got rich; You are franticly taking notes", "condition":function(a,m,t,apa){return m>1e5&&t<0.4;}},
+				{"text":"People are protesting outside your house. You call the police for disturbance of the peace", "condition":function(a,m,t,apa){return t<0.3&&Game.getUpgrade("Unpaid overtime").bought;}},
+				{"text":"<span style='font-family:Arial'>Help I'm stuck in a video game</span>", "condition":function(a,m,t,apa){return Math.random()<0.00001;}}
+			],
+			headline;
+		headline=get(headlines.filter(x=>x.condition(
+			Game.data.curr.articles.value,
+			Game.data.curr.money.value,
+			Game.data.curr.trust.value,
+			Game.data.curr.adsPerArticle.value
+		))).text;
+		if (headline=="You find a $20 bill on the ground"){Game.data.curr.money.value+=20;}
+		if (headline=="Someone stole your wallet"){Game.data.curr.money.value*=0.995;}
+		if (headline=="{things}"){headline=get(people)+" "+get(action)+" "+get(things)+" "+get(places);}
+		if (headline=="The FBI found your employee treatment unethical; You pay them to ignore it"){Game.data.curr.money-=1e10;}
+		document.getElementById("headlines").innerHTML=headline;
+		setTimeout(Game.doHeadlines, 5000);
 	}
 }
 window.onload=Game.init;
